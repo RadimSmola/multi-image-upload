@@ -1,0 +1,24 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Nový produkt{% endblock %}
+
+{% block body %}
+    <h1>Vytvořit nový produkt</h1>
+
+    {# Vykreslení flash zpráv (úspěch/chyba) #}
+    {% for label, messages in app.flashes %}
+        {% for message in messages %}
+            <div class="alert alert-{{ label }}">
+                {{ message }}
+            </div>
+        {% endfor %}
+    {% endfor %}
+
+    {# Vykreslení formuláře #}
+    {{ form_start(form) }}
+    {{ form_widget(form) }}
+    {{ form_end(form) }}
+
+
+
+{% endblock %}
