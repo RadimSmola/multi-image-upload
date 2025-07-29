@@ -5,6 +5,7 @@ namespace App\Controller;
 use App\Entity\Image;
 use App\Entity\Product;
 use App\Form\ProductType;
+use App\Repository\ProductRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\File\Exception\FileException;
@@ -27,7 +28,7 @@ final class ProductController extends AbstractController
     public function new(
         Request $request,
         EntityManagerInterface $entityManager,
-        SluggerInterface $slugger
+        SluggerInterface $slugger,
     ): Response {
         $product = new Product();
         $form = $this->createForm(ProductType::class, $product);
@@ -74,9 +75,19 @@ final class ProductController extends AbstractController
             // Přesměrujeme například na detail produktu (zatím nemáme, tak na hlavní stránku)
             return $this->redirectToRoute('app_product_new');
         }
+
         return $this->render('product/new.html.twig', [
             'form' => $form->createView(),
         ]);
+    }
 
+    #[Route('/gallery', name: 'app_product_gallery')]
+    public function gallery(ProductRepository $productRepository): Response
+    {
+        $products = $productRepository->findAll();
+
+        return $this->render('product/gallery.html.twig', [
+            'products' => $products,
+        ]);
     }
 }
